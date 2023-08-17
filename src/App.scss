@@ -1,0 +1,18 @@
+@import './sass/_libraries.scss';
+@import './sass/header';
+@import './sass/home';
+@import './sass/color';
+
+
+#root{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main{
+  flex: 1 0 auto
+}
+
+.mh-100{
+  min-height: 100vh;
+}
