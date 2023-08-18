@@ -22,13 +22,18 @@ export default function Todo() {
       }).catch((err) => {
         console.log('err', err)
       })
-  }, [isModalOpen])
+  }, [])
 
   const handleEdit = () => {
     axios.post(`${URL}/updateTodo`, upTodo)
       .then((res) => {
         if (res.data === 'Todo Update') {
-          setIsModalOpen(false)
+          let newDocuments = documents.map((doc) => {
+            if (doc._id === upTodo._id)
+              return upTodo
+            return doc
+          })
+          setDocuments(newDocuments)
         }
         setIsModalOpen(false)
       }).catch((err) => {
