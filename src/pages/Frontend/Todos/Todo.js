@@ -22,7 +22,7 @@ export default function Todo() {
       }).catch((err) => {
         console.log('err', err)
       })
-  }, [type,isModalOpen])
+  }, [type, isModalOpen])
 
   const handleSearch = (e) => { setFilterDocuments(documents.filter(doc => doc.title.toLowerCase().includes(e.target.value.toLowerCase()))) }
 
@@ -59,8 +59,6 @@ export default function Todo() {
       })
   }
 
-  console.log('upTodo', upTodo)
-
   return (
     <>
       <div className='container'>
@@ -75,33 +73,36 @@ export default function Todo() {
             </select>
 
           </div>
-
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Title</th>
-                <th scope="col">Location</th>
-                <th scope="col">Description</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filterDocuments.map((todo, i) => {
-                return (
-                  <tr key={i}>
-                    <th scope="row">{i + 1}</th>
-                    <td>{todo.title}</td>
-                    <td>{todo.location}</td>
-                    <td>{todo.description}</td>
-                    <td><button className='me-3 border-0 bg-info text-white p-1 rounded-3 px-2' onClick={() => { setUpTodo(todo); setIsModalOpen(true) }} >Edit</button>
-                      {type === 'active' && <button className='border-0 bg-danger text-white p-1 rounded-3 px-3' onClick={() => handleDelete(todo)}>Del</button>}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+          <div className="row">
+            <div className="col-12 text-center">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">No.</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Location</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filterDocuments.map((todo, i) => {
+                      return (
+                        <tr key={i}>
+                          <th scope="row">{i + 1}</th>
+                          <td>{todo.title}</td>
+                          <td>{todo.location}</td>
+                          <td>{todo.description}</td>
+                          <td><button className='me-3 border-0 bg-info text-white p-1 rounded-3 px-2' onClick={() => { setUpTodo(todo); setIsModalOpen(true) }} >Edit</button>
+                            {type === 'active' && <button className='border-0 bg-danger text-white p-1 rounded-3 px-3' onClick={() => handleDelete(todo)}>Del</button>}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
       </div>
 
       <Modal title="Update Todo" open={isModalOpen} okText='Update' onOk={handleEdit} onCancel={() => setIsModalOpen(false)}>

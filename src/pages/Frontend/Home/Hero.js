@@ -49,7 +49,7 @@ export default function Hero() {
   return (
     <div className='bg-light'>
       <div className="container d-flex justify-content-center align-items-center" style={{minHeight:'88vh'}}>
-        <div className="card w-50 p-4">
+        <div className="card p-4">
           <h4 className='text-center'>Add Todo</h4>
           <div className="row mt-3">
             <div className="col-6">
