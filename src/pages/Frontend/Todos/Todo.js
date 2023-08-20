@@ -22,7 +22,7 @@ export default function Todo() {
       }).catch((err) => {
         console.log('err', err)
       })
-  }, [type])
+  }, [type,isModalOpen])
 
   const handleSearch = (e) => { setFilterDocuments(documents.filter(doc => doc.title.toLowerCase().includes(e.target.value.toLowerCase()))) }
 
@@ -59,6 +59,8 @@ export default function Todo() {
       })
   }
 
+  console.log('upTodo', upTodo)
+
   return (
     <>
       <div className='container'>
@@ -81,7 +83,7 @@ export default function Todo() {
                 <th scope="col">Title</th>
                 <th scope="col">Location</th>
                 <th scope="col">Description</th>
-                {type === 'active' && <th scope="col">Action</th>}
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -92,10 +94,8 @@ export default function Todo() {
                     <td>{todo.title}</td>
                     <td>{todo.location}</td>
                     <td>{todo.description}</td>
-                    {type !== 'unActive' &&
-                      <td><button className='me-3 border-0 bg-info text-white p-1 rounded-3 px-2' onClick={() => { setUpTodo(todo); setIsModalOpen(true) }} >Edit</button>
-                        <button className='border-0 bg-danger text-white p-1 rounded-3 px-3' onClick={() => handleDelete(todo)}>Del</button></td>
-                    }
+                    <td><button className='me-3 border-0 bg-info text-white p-1 rounded-3 px-2' onClick={() => { setUpTodo(todo); setIsModalOpen(true) }} >Edit</button>
+                      {type === 'active' && <button className='border-0 bg-danger text-white p-1 rounded-3 px-3' onClick={() => handleDelete(todo)}>Del</button>}</td>
                   </tr>
                 )
               })}
@@ -104,7 +104,7 @@ export default function Todo() {
         </div>
       </div>
 
-      <Modal title="Update Todo" open={isModalOpen} onOk={handleEdit} onCancel={() => setIsModalOpen(false)}>
+      <Modal title="Update Todo" open={isModalOpen} okText='Update' onOk={handleEdit} onCancel={() => setIsModalOpen(false)}>
         <div className="row mt-3">
           <div className="col-6">
             <input type="text" name='title' value={upTodo.title} className='w-100 p-2 rounded-3 outline-none' placeholder='Enter Your Title' onChange={handleChange} />
@@ -115,7 +115,14 @@ export default function Todo() {
           <div className="col-12 mt-3">
             <textarea name="description" value={upTodo.description} className='w-100' cols="10" rows="5" onChange={handleChange}></textarea>
           </div>
+          <div className="col-12 my-2">
+            <select name="status" className='w-100 p-2 rounded-2' onChange={handleChange} value={upTodo.status}>
+              <option value="active">Active</option>
+              <option value="unActive">unActive</option>
+            </select>
+          </div>
         </div>
+        <hr />
       </Modal>
 
     </>
