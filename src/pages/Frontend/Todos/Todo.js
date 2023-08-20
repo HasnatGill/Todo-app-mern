@@ -39,7 +39,7 @@ export default function Todo() {
               return upTodo
             return doc
           })
-          setDocuments(newDocuments)
+          setFilterDocuments(newDocuments)
         }
         setIsModalOpen(false)
       }).catch((err) => {
@@ -52,7 +52,7 @@ export default function Todo() {
       .then((res) => {
         if (res.data === 'Todo Deleted') {
           let documentAfterDelete = documents.filter(doc => doc._id !== todo._id)
-          setDocuments(documentAfterDelete)
+          setFilterDocuments(documentAfterDelete)
         }
       }).catch((err) => {
         console.log('err', err)
@@ -62,8 +62,6 @@ export default function Todo() {
   return (
     <>
       <div className='container'>
-
-
         <div className="mt-5">
 
           <div className="mb-2 d-flex justify-content-end align-items-center">
@@ -106,7 +104,7 @@ export default function Todo() {
         </div>
       </div>
 
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleEdit} onCancel={() => setIsModalOpen(false)}>
+      <Modal title="Update Todo" open={isModalOpen} onOk={handleEdit} onCancel={() => setIsModalOpen(false)}>
         <div className="row mt-3">
           <div className="col-6">
             <input type="text" name='title' value={upTodo.title} className='w-100 p-2 rounded-3 outline-none' placeholder='Enter Your Title' onChange={handleChange} />
