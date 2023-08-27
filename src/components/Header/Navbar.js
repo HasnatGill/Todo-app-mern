@@ -19,6 +19,9 @@ export default function Navbar() {
                             <li className="nav-item">
                                 <Link to='/todos' className="nav-link active fw-bold" aria-current="page">Todo</Link>
                             </li>
+                            <li className="nav-item">
+                                <Link to='/auth/login' className="nav-link active fw-bold" aria-current="page">Login</Link>
+                            </li>
                         </ul>
                     </div>
                 </div>

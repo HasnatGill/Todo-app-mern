@@ -2,6 +2,7 @@
 @import './sass/header';
 @import './sass/home';
 @import './sass/color';
+@import './sass/auth';
 
 
 #root{
@@ -15,4 +16,10 @@ main{
 
 .mh-100{
   min-height: 100vh;
+}
+
+.flex-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,0 +1,23 @@
+.login_page {
+    min-height: 100vh;
+    background: rgb(74, 251, 255);
+    background: linear-gradient(90deg, rgba(74, 251, 255, 1) 54%, rgba(74, 255, 192, 0.8520658263305322) 74%);
+
+    .login_input {
+        border: none;
+        border-bottom: 2px solid black;
+        outline: none;
+    }
+}
+
+.register_page {
+    min-height: 100vh;
+    background: rgb(74, 251, 255);
+    background: linear-gradient(90deg, rgba(74, 251, 255, 1) 54%, rgba(74, 255, 192, 0.8520658263305322) 74%);
+
+    .register_input {
+        border: none;
+        border-bottom: 2px solid black;
+        outline: none;
+    }
+}
