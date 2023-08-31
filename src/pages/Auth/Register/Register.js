@@ -1,9 +1,13 @@
+import axios from 'axios'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const intialState = { email: "", password: "", userName: "" }
+const URL = 'http://localhost:8000'
 
 export default function Register() {
+
+    const navigate = useNavigate('/')
 
     const [state, setState] = useState(intialState)
     const [processing, setProcessing] = useState(false)
@@ -13,10 +17,26 @@ export default function Register() {
         setState(s => ({ ...s, [name]: value }))
     }
 
-    const handleRegister = () => {
+    const handleRegister = async (e) => {
+        e.preventDefault()
+        let { userName, email, password } = state
+        
+        if (!userName) return (alert('Enter Your Full Name'))
+        
         setProcessing(true)
-        console.log('state', state)
-        setProcessing(false)
+        await axios.post(`${URL}/register`, { userName, email, password })
+            .then((res) => {
+                if (res.statusText === 'OK') {
+                    localStorage.setItem('token', res.data)
+                    alert("User Successfully Register")
+                    navigate('/')
+                }
+            }).catch((err) => {
+                console.log('err', err)
+            })
+            .finally(() => {
+                setProcessing(false)
+            })
     }
 
     return (

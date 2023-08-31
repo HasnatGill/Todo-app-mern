@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const intialState = { email: "", password: "" }
 
 export default function Login() {
 
+    const navigate = useNavigate()
+
     const [state, setState] = useState(intialState)
     const [processing, setProcessing] = useState(false)
+
     const handleChange = e => {
         let { name, value } = e.target
         setState(s => ({ ...s, [name]: value }))
@@ -15,6 +18,7 @@ export default function Login() {
     const handleLogin = () => {
         setProcessing(true)
         console.log('state', state)
+        navigate('/')
         setProcessing(false)
     }
 
@@ -22,7 +26,8 @@ export default function Login() {
         <div className='login_page flex-center'>
             <div className="card px-3 pt-3 rounded-5" style={{ minWidth: '22rem' }}>
                 <h1 className='text-center my-2'>Login</h1>
-                <input type="email" name='email' placeholder='Enter Your Email' onChange={handleChange} className='login_input rounded-2 my-3' />
+
+                <input type="email" name='email' placeholder='Enter Your Email' onChange={handleChange} className='login_input rounded-2 my-3 w-100' />
                 <input type="password" name='password' placeholder='Enter your Passwoed' onChange={handleChange} className='login_input rounded-2' />
 
                 <Link to='#' className='text-end my-2' >Forget Password?</Link>
