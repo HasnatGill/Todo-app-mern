@@ -20,19 +20,22 @@ export default function Register() {
     const handleRegister = async (e) => {
         e.preventDefault()
         let { userName, email, password } = state
-        
-        if (!userName) return (alert('Enter Your Full Name'))
-        
+
+        if (!userName) return window.notify("Please enter your full name", "warning")
+        if (!email) return window.notify("Please enter your enter", "warning")
+        if (password.length < 6) return window.notify("Password lenght should be gearter then 6 digits", "warning")
+
         setProcessing(true)
-        await axios.post(`${URL}/register`, { userName, email, password })
+        await axios.post(`${URL}/register`, { userName, email, password, uid: window.getRandomId() })
             .then((res) => {
                 if (res.statusText === 'OK') {
-                    localStorage.setItem('token', res.data)
-                    alert("User Successfully Register")
+                    const data = { token: res.data.token, uid: res.data.uid }
+                    localStorage.setItem('token', JSON.stringify(data));
+                    window.notify("User Successfully Register", "success")
                     navigate('/')
                 }
             }).catch((err) => {
-                console.log('err', err)
+                window.notify(err.response.data, "error")
             })
             .finally(() => {
                 setProcessing(false)

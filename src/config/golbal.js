@@ -3,16 +3,10 @@ import dayjs from 'dayjs'
 
 window.getRandomId = () => Math.random().toString(34).slice(2);
 
-window.getTimeStamp = (timestamp, myFormat = "ddd,MMM D,YYYY hh:mm:ss") => {
-    let date = new Date(timestamp.seconds * 1000)
-    return dayjs(date).format(myFormat)
-}
-
 window.notify = (msg, type) => {
-
     const option = {
         position: "bottom-right",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

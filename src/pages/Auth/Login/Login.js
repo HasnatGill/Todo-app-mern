@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const intialState = { email: "", password: "" }
+const URL = 'http://localhost:8000'
 
 export default function Login() {
 
@@ -15,11 +17,28 @@ export default function Login() {
         setState(s => ({ ...s, [name]: value }))
     }
 
-    const handleLogin = () => {
+    const handleLogin = async (e) => {
+        e.preventDefault()
+        let { email, password } = state
+
+        if (!email) return window.notify("Please enter your enter", "warning")
+        if (password.length < 6) return window.notify("Password lenght should be gearter then 6 digits", "warning")
+
         setProcessing(true)
-        console.log('state', state)
-        navigate('/')
-        setProcessing(false)
+        await axios.post(`${URL}/login`, { email, password })
+            .then((res) => {
+                if (res.statusText === 'OK') {
+                    const data = { token: res.data.token, uid: res.data.uid }
+                    localStorage.setItem('token', JSON.stringify(data));
+                    window.notify("User Successfully Login", "success")
+                    navigate('/')
+                }
+            }).catch((err) => {
+                window.notify(err.response.data.message, "error")
+            })
+            .finally(() => {
+                setProcessing(false)
+            })
     }
 
     return (
