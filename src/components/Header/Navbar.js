@@ -5,7 +5,12 @@ import { useAuthContext } from '../../context/AuthContext'
 
 export default function Navbar() {
 
-    const { isAuth } = useAuthContext()
+    const { isAuth, dispatch } = useAuthContext()
+
+    const handleLogout = () => {
+        localStorage.removeItem('token')
+        dispatch({ type: 'LOGOUT' })
+    }
 
     return (
         <header>
@@ -26,7 +31,7 @@ export default function Navbar() {
                             <li className="nav-item">
                                 {!isAuth
                                     ? <Link to='/auth/login' className="nav-link active fw-bold" aria-current="page">Login</Link>
-                                    : <button className="active fw-bold btn btn-danger flex-center mt-1 " aria-current="page"><LoginOutlined /></button>
+                                    : <button className="active fw-bold btn btn-danger flex-center mt-1 " onClick={handleLogout} aria-current="page"><LoginOutlined /></button>
                                 }
                             </li>
                         </ul>

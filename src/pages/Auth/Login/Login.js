@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, json, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const intialState = { email: "", password: "" }
@@ -30,15 +30,17 @@ export default function Login() {
                 if (res.statusText === 'OK') {
                     const data = { token: res.data.token, uid: res.data.uid }
                     localStorage.setItem('token', JSON.stringify(data));
-                    window.notify("User Successfully Login", "success")
-                    navigate('/')
+                    const token = JSON.parse(localStorage.getItem('token'))
+                    if (token) {
+                        window.location.href = '/'
+                        window.notify("User Successfully Login", "success")
+                        setProcessing(false)
+                    }
                 }
             }).catch((err) => {
                 window.notify(err.response.data.message, "error")
             })
-            .finally(() => {
-                setProcessing(false)
-            })
+        setProcessing(false)
     }
 
     return (

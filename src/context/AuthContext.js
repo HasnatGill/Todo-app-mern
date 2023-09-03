@@ -45,6 +45,7 @@ export function AuthContextPovider({ children }) {
                 console.log('err', err)
             }
         }
+        setIsAppLoding(false)
     }, [])
 
     return (

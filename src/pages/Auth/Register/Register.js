@@ -31,8 +31,12 @@ export default function Register() {
                 if (res.statusText === 'OK') {
                     const data = { token: res.data.token, uid: res.data.uid }
                     localStorage.setItem('token', JSON.stringify(data));
-                    window.notify("User Successfully Register", "success")
-                    navigate('/')
+                    const token = JSON.parse(localStorage.getItem('token'))
+                    if (token) {
+                        window.location.href = '/'
+                        window.notify("User Successfully Login", "success")
+                        setProcessing(false)
+                    }
                 }
             }).catch((err) => {
                 window.notify(err.response.data, "error")
