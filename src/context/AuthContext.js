@@ -1,10 +1,8 @@
-import React, { useReducer, createContext, useEffect, useState } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth, firestore } from '../config/firebase'
-import { doc, getDoc } from 'firebase/firestore/lite'
+import React, { useReducer, createContext, useContext, useEffect, useState } from 'react'
+import axios from 'axios'
 
-export const AuthContext = createContext()
-
+const AuthContext = createContext()
+const URL = 'http://localhost:8000'
 
 const initialState = { isAuth: false }
 
@@ -20,41 +18,40 @@ const reducer = ((state, { type, payload }) => {
     }
 })
 
-export default function AuthContextPovider({ children }) {
+export function AuthContextPovider({ children }) {
 
 
     const [state, dispatch] = useReducer(reducer, initialState)
     const [isAppLoading, setIsAppLoding] = useState(true)
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                readUser(user)
-            } else {
-                setIsAppLoding(false)
-                // ... 
+        const token = localStorage.getItem("token")
+        if (token) {
+            let Token = JSON.parse(token)
+            try {
+                axios.get(`${URL}/readUsers`)
+                    .then((res) => {
+                        let { data } = res;
+                        if (Token.uid) {
+                            const user = data.find((item) => item.uid === Token.uid)
+                            dispatch({ type: "LOGIN", payload: user })
+                            console.log('user', user)   
+                            setIsAppLoding(false)
+                        }
+                    }).catch((err) => {
+                        console.log('err', err)
+                    })
+            } catch (err) {
+                console.log('err', err)
             }
-        });
+        }
     }, [])
 
-    const readUser = async (authUser) => {
-        const docRef = doc(firestore, "users", authUser.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            let user = docSnap.data()
-            const isCustomer = user.roles?.includes("customer")
-            dispatch({ type: "LOGIN", payload: { user, isCustomer } })
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-        setIsAppLoding(false)
-    }
-
     return (
-        <AuthContext.Provider value={{ ...state, dispatch }}>
+        <AuthContext.Provider value={{ ...state, dispatch, isAppLoading, setIsAppLoding }}>
             {children}
         </AuthContext.Provider>
     )
 }
+
+export const useAuthContext = () => useContext(AuthContext)

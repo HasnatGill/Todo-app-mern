@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './config/golbal'
 import reportWebVitals from './reportWebVitals';
+import { AuthContextPovider } from './context/AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthContextPovider>
+      <App />
+    </AuthContextPovider>
   </React.StrictMode>
 );
 

@@ -1,8 +1,12 @@
 import React from 'react'
-
+import { LoginOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom'
+import { useAuthContext } from '../../context/AuthContext'
 
 export default function Navbar() {
+
+    const { isAuth } = useAuthContext()
+
     return (
         <header>
             <nav className="navbar navbar_style navbar-expand-lg">
@@ -14,13 +18,16 @@ export default function Navbar() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link to='/' className="nav-link active fw-bold" aria-current="page">Home</Link>
+                                <Link to='/' className="nav-link active fw-bold" aria-current="page">HOME</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to='/todos' className="nav-link active fw-bold" aria-current="page">Todo</Link>
+                                <Link to='/todos' className="nav-link active fw-bold" aria-current="page">TODO</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to='/auth/login' className="nav-link active fw-bold" aria-current="page">Login</Link>
+                                {!isAuth
+                                    ? <Link to='/auth/login' className="nav-link active fw-bold" aria-current="page">Login</Link>
+                                    : <button className="active fw-bold btn btn-danger flex-center mt-1 " aria-current="page"><LoginOutlined /></button>
+                                }
                             </li>
                         </ul>
                     </div>
