@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useAuthContext } from '../../../context/AuthContext'
 
 const initialState = { title: "", location: "", description: "" }
 
 export default function Hero() {
+
+  const { user } = useAuthContext()
 
   const [state, setState] = useState(initialState)
   const [processing, setProcessing] = useState(false)
@@ -16,25 +19,30 @@ export default function Hero() {
   }
 
   const handleSubmit = () => {
+
     let { title, location, description } = state;
 
     title = title.trim()
     location = location.trim()
     description = description.trim()
 
-    if (title.length < 3) { return (alert('Please Enter Your Name')) }
-    if (location.length < 3) { return (alert('Please Enter Your Location')) }
-    if (description.length < 10) { return (alert('Please Enter Your Description')) }
+    if (title.length < 3) { return window.notify('Enter the Title and title word should be 5', "error"); }
+    if (location.length < 3) { return window.notify('Enter the Location and location word should be 5', "error"); }
+    if (description.length < 10) { return window.notify('Enter the Description and description word should be 10', "error"); }
 
     setProcessing(true)
 
     let todo = {
-      title, location, description, status: "active"
+      title, location, description, status: "active",
+      createdBy: {
+        email: user.email,
+        uid: user.uid
+      }
     }
 
     axios.post(`${URL}/createTodo`, todo)
       .then((res) => {
-        console.log('res', res)
+        window.notify(res.data.massage,'success')
         setProcessing(false)
         setState(initialState)
       })
@@ -48,7 +56,7 @@ export default function Hero() {
 
   return (
     <div className='bg-light'>
-      <div className="container d-flex justify-content-center align-items-center" style={{minHeight:'88vh'}}>
+      <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '88vh' }}>
         <div className="card p-4">
           <h4 className='text-center'>Add Todo</h4>
           <div className="row mt-3">

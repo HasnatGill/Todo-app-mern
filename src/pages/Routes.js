@@ -10,8 +10,6 @@ export default function Index() {
 
     const { isAuth } = useAuthContext()
 
-    console.log('isAuth', isAuth)
-
     return (
         <>
             <Routes>

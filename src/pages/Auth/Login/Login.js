@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import { Link, json, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 const intialState = { email: "", password: "" }
 const URL = 'http://localhost:8000'
 
 export default function Login() {
-
-    const navigate = useNavigate()
 
     const [state, setState] = useState(intialState)
     const [processing, setProcessing] = useState(false)

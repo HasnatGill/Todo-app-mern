@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Modal } from 'antd';
+import { useAuthContext } from '../../../context/AuthContext';
 
 const URL = 'http://localhost:8000'
 
 export default function Todo() {
+
+  const { user } = useAuthContext()
 
   const [documents, setDocuments] = useState([])
   const [filterDocuments, setFilterDocuments] = useState([])
@@ -16,9 +19,10 @@ export default function Todo() {
     axios.get(`${URL}/readTodo`)
       .then((res) => {
         let { data } = res
-        let filterDocuments = data.filter(item => item.status === type)
-        setDocuments(filterDocuments)
-        setFilterDocuments(filterDocuments)
+        let filterDocuments = data.filter(item => item.createdBy.uid === user.uid)
+        let FFDocuments = filterDocuments.filter(item => item.status === type)
+        setDocuments(FFDocuments)
+        setFilterDocuments(FFDocuments)
       }).catch((err) => {
         console.log('err', err)
       })
@@ -33,12 +37,13 @@ export default function Todo() {
   const handleEdit = () => {
     axios.post(`${URL}/updateTodo`, upTodo)
       .then((res) => {
-        if (res.data === 'Todo Update') {
+        if (res.data === 'Todo Successfully Update..') {
           let newDocuments = documents.map((doc) => {
             if (doc._id === upTodo._id)
               return upTodo
             return doc
           })
+          window.notify(res.data, 'success')
           setFilterDocuments(newDocuments)
         }
         setIsModalOpen(false)
@@ -50,9 +55,10 @@ export default function Todo() {
   const handleDelete = todo => {
     axios.post(`${URL}/deleteTodo`, todo)
       .then((res) => {
-        if (res.data === 'Todo Deleted') {
+        if (res.data === 'Todo Successfully Deleted..') {
           let documentAfterDelete = documents.filter(doc => doc._id !== todo._id)
           setFilterDocuments(documentAfterDelete)
+          window.notify(res.data, 'success')
         }
       }).catch((err) => {
         console.log('err', err)
@@ -75,34 +81,34 @@ export default function Todo() {
           </div>
           <div className="row">
             <div className="col-12 text-center">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">No.</th>
-                      <th scope="col">Title</th>
-                      <th scope="col">Location</th>
-                      <th scope="col">Description</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filterDocuments.map((todo, i) => {
-                      return (
-                        <tr key={i}>
-                          <th scope="row">{i + 1}</th>
-                          <td>{todo.title}</td>
-                          <td>{todo.location}</td>
-                          <td>{todo.description}</td>
-                          <td><button className='me-3 border-0 bg-info text-white p-1 rounded-3 px-2' onClick={() => { setUpTodo(todo); setIsModalOpen(true) }} >Edit</button>
-                            {type === 'active' && <button className='border-0 bg-danger text-white p-1 rounded-3 px-3' onClick={() => handleDelete(todo)}>Del</button>}</td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filterDocuments.map((todo, i) => {
+                    return (
+                      <tr key={i}>
+                        <th scope="row">{i + 1}</th>
+                        <td>{todo.title}</td>
+                        <td>{todo.location}</td>
+                        <td>{todo.description}</td>
+                        <td><button className='me-3 border-0 bg-info text-white p-1 rounded-3 px-2' onClick={() => { setUpTodo(todo); setIsModalOpen(true) }} >Edit</button>
+                          {type === 'active' && <button className='border-0 bg-danger text-white p-1 rounded-3 px-3' onClick={() => handleDelete(todo)}>Del</button>}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
+        </div>
       </div>
 
       <Modal title="Update Todo" open={isModalOpen} okText='Update' onOk={handleEdit} onCancel={() => setIsModalOpen(false)}>

@@ -20,7 +20,6 @@ const reducer = ((state, { type, payload }) => {
 
 export function AuthContextPovider({ children }) {
 
-
     const [state, dispatch] = useReducer(reducer, initialState)
     const [isAppLoading, setIsAppLoding] = useState(true)
 
@@ -34,8 +33,7 @@ export function AuthContextPovider({ children }) {
                         let { data } = res;
                         if (Token.uid) {
                             const user = data.find((item) => item.uid === Token.uid)
-                            dispatch({ type: "LOGIN", payload: user })
-                            console.log('user', user)   
+                            dispatch({ type: "LOGIN", payload: { user } })
                             setIsAppLoding(false)
                         }
                     }).catch((err) => {
